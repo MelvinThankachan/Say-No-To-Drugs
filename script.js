@@ -90,10 +90,45 @@ document.addEventListener('DOMContentLoaded', () => {
       
       if (targetSection) {
         isScrolling = true;
-        targetSection.scrollIntoView({ behavior: 'smooth' });
         
         // Update active dot
         updateActiveDot(targetId.substring(1));
+        
+        // Force section visibility and animations before scrolling
+        targetSection.classList.add('visible');
+        const children = targetSection.querySelectorAll('h1, p, div:not(.auto-blur), .contact-button, .btn');
+        children.forEach((child, index) => {
+          // Remove the animate class first to reset the animation
+          child.classList.remove('animate');
+          // Force a reflow
+          void child.offsetWidth;
+          // Add the animate class
+          child.classList.add('animate');
+        });
+        
+        // Handle blur elements if they exist in this section
+        const blurElements = targetSection.querySelectorAll('.auto-blur');
+        if (blurElements.length > 0) {
+          blurElements.forEach((element, index) => {
+            element.classList.remove('animate');
+            void element.offsetWidth;
+            setTimeout(() => {
+              element.classList.add('animate');
+            }, 100 * (index + 1));
+          });
+        }
+        
+        // Apply text scramble if heading exists
+        const heading = targetSection.querySelector('h1');
+        if (heading) {
+          const headingId = targetSection.id || Math.random().toString(36).substring(2, 9);
+          const text = headingTexts[headingId] || heading.textContent;
+          const fx = new TextScramble(heading);
+          fx.setText(text);
+        }
+        
+        // Scroll to the section
+        targetSection.scrollIntoView({ behavior: 'smooth' });
         
         // Reset scrolling flag after animation completes
         setTimeout(() => {
