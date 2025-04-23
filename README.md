@@ -19,6 +19,10 @@ A minimal, black and white themed website focused on raising awareness about dru
 
 ## Getting Started
 
+### View Live Demo
+Visit the live website: [Say No to Drugs](https://melvinthankachan.github.io/Say-No-To-Drugs/)
+
+### Run Locally
 To run this project locally:
 
 1. Clone the repository
